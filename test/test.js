@@ -1,9 +1,15 @@
 const Docker = require("dockerode");
-const cp = require("child_process");
-const expect = require('chai').expect;
 const docker = new Docker();
-const assert = require('assert');
+
+const Dockerode = require('simple-dockerode'); // Todo: This can be redundant if I manage to make Dockerode works. 
+const dockerode = new Dockerode();
+
+const cp = require("child_process");
 const fs = require('fs');
+const stream = require('stream')
+
+const assert = require('assert');
+const expect = require('chai').expect;
 
 function Exec(command, options = { log: false, cwd: process.cwd() }) {
   if (options.log) console.log(command);
@@ -75,14 +81,16 @@ describe('Testing the Wrapper: ', function() {
 
   before(function (done) {
     setup.then((data) => {
-      container = docker.getContainer(data.containerID);
+      container = dockerode.getContainer(data.containerID);
       multichain = require('../index.js')(data.connection);
+      console.log(data.connection);
       done();
     });
   })
 
   context('General Utilities', function() {
     describe('#getblockchainparams()', function() {
+      this.timeout(10000);
       it('should return a list of values of this blockchain\'s parameters ', async() => {
         const response = await multichain.getBlockchainParams();
         const dockerResponse = await callDocker(container, "getblockchainparams");
@@ -93,25 +101,6 @@ describe('Testing the Wrapper: ', function() {
 });
 
 async function callDocker(container, command) {
-  let response = [];
-  const dockerResponse = await container.exec(
-    {
-      Cmd: ["./multichain-cli", "MyChain", command], //Todo: Fix hard-coded name
-      AttachStdin: true,
-      AttachStdout: true,
-      tty: true,
-      WorkingDir: '/usr/local/bin',
-      Env: []
-    });
-    dockerResponse.start({stdin: true}, (err, stream) => {
-      if (err) console.log('err', err);
-      stream.on('data', (d) => {
-        response.push(d)
-      });
-      stream.on('end', (a) => {
-        console.log(Buffer.concat(response).toString('utf8'));
-      })
-  })
-
-  return response;
+  const response = await container.exec(['multichain-cli', 'MyChain', command], {stdout: true});
+  return response.stdout
 }

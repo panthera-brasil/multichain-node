@@ -29,6 +29,8 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "dockerode": "^2.5.8",
-    "mocha": "^6.0.1"
+    "mocha": "^6.0.1",
+    "simple-dockerode": "^0.2.2",
+    "stream": "0.0.2"
   }
 }
