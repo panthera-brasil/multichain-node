@@ -89,17 +89,23 @@ describe('Testing the Wrapper: ', function() {
 
   context('General Utilities: ', function() {
     describe('getblockchainparams()', function() {
-      this.timeout(10000);
       it('should return a list of values of this blockchain\'s parameters ', async() => {
         const response = await multichain.getBlockchainParams();
         const dockerResponse = await callDocker(container, "getblockchainparams");
-        expect(response).to.eql(JSON.parse(dockerResponse));
+        expect(response).to.eql(dockerResponse);
       });
     });
+    describe('getruntimeparams()', function() {
+      it('Returns a selection of this node\'s runtime parameters', async() => {
+        const response = await multichain.getRuntimeParams();
+        const dockerResponse = await callDocker(container, "getruntimeparams");
+        expect(response).to.eql(dockerResponse);
+      })
+    })
   }); 
 });
 
 async function callDocker(container, command) {
   const response = await container.exec(['multichain-cli', 'MyChain', command], {stdout: true});
-  return response.stdout
+  return JSON.parse(response.stdout)
 }
