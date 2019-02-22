@@ -1,10 +1,10 @@
-const Docker = require("dockerode");
+const Docker = require('dockerode');
 const docker = new Docker();
 
 const Dockerode = require('simple-dockerode'); // Todo: This can be redundant if I manage to make Dockerode works. 
 const dockerode = new Dockerode();
 
-const cp = require("child_process");
+const cp = require('child_process');
 const fs = require('fs');
 const stream = require('stream')
 
@@ -95,17 +95,36 @@ describe('Testing the Wrapper: ', function() {
         expect(response).to.eql(dockerResponse);
       });
     });
-    describe('getruntimeparams()', function() {
-      it('Returns a selection of this node\'s runtime parameters', async() => {
+    describe('setruntimeparam(param value) and getruntimeparams()', function() {
+      it('Sets the runtime parameter param to value and Returns a selection of this node\'s runtime parameters', async() => {
+        
+        await multichain.setRuntimeParam({param: 'maxshowndata', value: '10384'});
         const response = await multichain.getRuntimeParams();
-        const dockerResponse = await callDocker(container, "getruntimeparams");
+
+        await multichain.setRuntimeParam({param: 'maxshowndata', value: '16384'}); // Reverting back the state
+
+        await callDocker(container, 'setruntimeparam maxshowndata 10384');
+        const dockerResponse = await callDocker(container, 'getruntimeparams');
+        
         expect(response).to.eql(dockerResponse);
+      });
+      after(function revertingChanges() {
+        multichain.setRuntimeParam({param: 'maxshowndata', value: '16384'});
       })
-    })
+    });
   }); 
 });
 
 async function callDocker(container, command) {
-  const response = await container.exec(['multichain-cli', 'MyChain', command], {stdout: true});
-  return JSON.parse(response.stdout)
+  const commands = ['multichain-cli', 'MyChain'].concat(command.split(' '));
+  const response = await container.exec(commands, {stdout: true});
+  try {
+    return JSON.parse(response.stdout)
+  } catch (err) {
+    if (err == 'SyntaxError: Unexpected end of JSON input' && response.stderr == '') {
+      return '';
+    } else {
+      throw new Error(err);
+    }
+  }
 }
