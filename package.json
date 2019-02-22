@@ -4,11 +4,11 @@
   "description": "A wrapper for the Multichain JSON-RPC api that parses your input.",
   "main": "index.js",
   "scripts": {
-    "test": "./test/run"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scoin/multichain-node.git"
+    "url": "git+https://github.com/panthera-brasil/multichain-node.git"
   },
   "keywords": [
     "blockchain",
@@ -17,11 +17,14 @@
     "rpc"
   ],
   "author": "Greg Piccolo",
+  "contributors": [
+    "Tiago Loriato <github@tloriato.com> (http://tloriato.com)"
+  ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/scoin/multichain-node/issues"
+    "url": "https://github.com/panthera-brasil/multichain-node/issues"
   },
-  "homepage": "https://github.com/scoin/multichain-node#readme",
+  "homepage": "https://github.com/panthera-brasil/multichain-node#readme",
   "dependencies": {},
   "devDependencies": {
     "chai": "^4.2.0",
