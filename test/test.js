@@ -83,18 +83,17 @@ describe('Testing the Wrapper: ', function() {
     setup.then((data) => {
       container = dockerode.getContainer(data.containerID);
       multichain = require('../index.js')(data.connection);
-      console.log(data.connection);
       done();
     });
   })
 
-  context('General Utilities', function() {
-    describe('#getblockchainparams()', function() {
+  context('General Utilities: ', function() {
+    describe('getblockchainparams()', function() {
       this.timeout(10000);
       it('should return a list of values of this blockchain\'s parameters ', async() => {
         const response = await multichain.getBlockchainParams();
         const dockerResponse = await callDocker(container, "getblockchainparams");
-        expect(response).to.equal(dockerResponse);
+        expect(response).to.eql(JSON.parse(dockerResponse));
       });
     });
   }); 
