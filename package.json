@@ -23,5 +23,9 @@
   },
   "homepage": "https://github.com/scoin/multichain-node#readme",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "dockerode": "^2.5.8",
+    "mocha": "^6.0.1"
+  }
 }
