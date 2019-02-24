@@ -105,12 +105,36 @@ describe('Testing the Wrapper: ', function() {
 
         await callDocker(container, 'setruntimeparam maxshowndata 10384');
         const dockerResponse = await callDocker(container, 'getruntimeparams');
-        
+
         expect(response).to.eql(dockerResponse);
       });
       after(function revertingChanges() {
         multichain.setRuntimeParam({param: 'maxshowndata', value: '16384'});
-      })
+      });
+    });
+    describe('getinfo()', function () {
+      it('Returns general information about this node and blockchain.', async() => {
+        const pResponse = multichain.getInfo();
+        const pDockerResponse = callDocker(container, 'getinfo');
+        // This should replicate Promise.all()
+        const response = await pResponse;
+        const dockerResponse = await pDockerResponse;
+        expect(response).to.eql(dockerResponse);        
+      });
+    });
+    describe('help()', function() {
+      it('Returns a list of available API commands ', async() => {
+        const response = await multichain.help();
+        const dockerResponse = await callDocker(container, "help");
+        expect(true).to.eql(true);
+      });
+    });
+    describe('stop()', function() {
+      it('Shuts down the this blockchain node, i.e. stops the multichaind process.', async() => {
+        const response = await multichain.help();
+        const dockerResponse = await callDocker(container, "help");
+        expect(true).to.eql(true);
+      });
     });
   }); 
 });
@@ -121,8 +145,10 @@ async function callDocker(container, command) {
   try {
     return JSON.parse(response.stdout)
   } catch (err) {
-    if (err == 'SyntaxError: Unexpected end of JSON input' && response.stderr == '') {
+    if (err == 'SyntaxError: Unexpected end of JSON input' && command.split(' ')[0] == 'setruntimeparam') {
       return '';
+    } else if ('SyntaxError: Unexpected token = in JSON at position 0' && command.split(' ')[0] == 'help'){
+      return response.toString();
     } else {
       throw new Error(err);
     }
