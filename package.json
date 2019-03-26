@@ -1,6 +1,6 @@
 {
-  "name": "multichain-node",
-  "version": "2.2.0-version1.0.4",
+  "name": "multinodejs",
+  "version": "2.0",
   "description": "A wrapper for the Multichain JSON-RPC api that parses your input.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/panthera-brasil/multichain-node.git"
+    "url": "git+https://github.com/sdec-brasil/multinodejs.git"
   },
   "keywords": [
     "blockchain",
@@ -22,9 +22,9 @@
   ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/panthera-brasil/multichain-node/issues"
+    "url": "https://github.com/sdec-brasil/multinodejs/issues"
   },
-  "homepage": "https://github.com/panthera-brasil/multichain-node#readme",
+  "homepage": "hhttps://github.com/sdec-brasil/multinodejs#readme",
   "dependencies": {},
   "devDependencies": {
     "chai": "^4.2.0",
