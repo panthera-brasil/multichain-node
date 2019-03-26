@@ -1,11 +1,11 @@
-A native Javascript client built for Multichain and Bitcoin
+A native Javascript client built for Multichain
 ---------------------------------------------------
 
-Note: The current version is compatible with Multichain 1.0.x. For previous versions of Multichain that may be incompatible, see [Releases](https://github.com/scoin/multichain-node/releases).
+Note: The current version is compatible with Multichain 2.0.x. Previous versions of Multichain may be incompatible.
 
 All methods from the [Multichain API spec](http://www.multichain.com/developers/json-rpc-api/) are available. This library does not currently contain all bitcoind commands that are not part of the Multichain API spec, and as such is not really suitable for use with bitcoind. If you would like to add these commands, please submit a pull request with tests.
 
-See [commands.js](https://github.com/scoin/multichain-node/blob/development/lib/commands.js) for all methods and their required / optional parameters. 
+See [commands.js](https://github.com/sdec-brasil/multinodejs/blob/development/lib/commands.js) for all methods and their required / optional parameters. 
 
 ### Parser
 
@@ -26,7 +26,7 @@ SSL is supported. Pass your connection parameters as you would to the [core HTTP
 To use in your project:
 
 ```
-npm install multichain-node --save
+npm install multinodejs --save
 ```
 
 To run the tests:
@@ -62,29 +62,7 @@ multichain.issue({address: someAddress, asset: "zcoin", qty: 50000, units: 0.01,
     console.log(res)
 })
 
-multichain.sendAssetFrom({from: someAddress, to: someOtherAddress, asset: "zcoin", qty: 5}, (err, tx) => {
-    console.log(tx);
-})
-
-multichain.getAddresses((err, addresses) => {
-
-    multichain.createMultiSig({nrequired: 2, keys: addresses}, (err, wallet) => {
-        console.log(wallet)
-    })
-    
-})
-
-multichain.getRawTransaction({txid: someTxId}, (err, tx) => {
-
-    multichain.decodeRawTransaction({"hexstring": tx}, (err, dTx) => {
-        console.log(dTx)
-    })
-})
-
-
 ```
 ### Tests
 
-All commands are tested. To run the tests, pull the repo and make sure multichaind and multichain-util are on your path.
-
-From inside the directory, run `npm test`.
+**Important**: A few commands are tested right now, but the majority aren't. We hope to deploy a test suite that has 100% coverage within a few weeks. Feel free to open any issues as they might appear.
